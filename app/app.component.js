@@ -19,7 +19,7 @@ var AppComponent = (function () {
     }
     AppComponent.prototype.login = function () {
         var _this = this;
-        FB.login(function (result) {
+        FB.login(function (response) {
             _this.fbLoginResponse = response;
             _this.status = 'connected';
         }, { scope: 'user_friends' });

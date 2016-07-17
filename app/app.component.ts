@@ -4,6 +4,7 @@ import { FacebookService } from './facebook.service';
 
 declare const FB: any;
 
+
 @Component({
   selector: 'likers-app',
   template: `
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
     login() {
 
         FB.login( 
-            (result: any) => {
+            (response: any) => {
                  this.fbLoginResponse = response;
                  this.status = 'connected';
             }, 

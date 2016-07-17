@@ -8,6 +8,7 @@ declare const FB: any;
 @Injectable()
 export class FacebookService {
 
+
    login(){
        FB.login( 
           (result: any) => {
