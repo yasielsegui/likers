@@ -1,0 +1,1 @@
+{"version":3,"file":"mock-likers.js","sourceRoot":"","sources":["mock-likers.ts"],"names":[],"mappings":";AAEW,cAAM,GAAY;IACzB;QACI,EAAE,EAAE,QAAQ;QACZ,IAAI,EAAE,iBAAiB;QACvB,OAAO,EAAE,oJAAoJ;QAC7J,KAAK,EAAE,GAAG;KACb;IACD;QACI,EAAE,EAAE,QAAQ;QACZ,IAAI,EAAE,eAAe;QACrB,OAAO,EAAE,kJAAkJ;QAC3J,KAAK,EAAE,GAAG;KACb;CAEJ,CAAC"}
