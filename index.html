@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <title>Angular 2 QuickStart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <!-- 1. Load libraries -->
+     <!-- Polyfill(s) for older browsers -->
+    <script src="node_modules/core-js/client/shim.min.js"></script>
+    <script src="node_modules/zone.js/dist/zone.js"></script>
+    <script src="node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <!-- 2. Configure SystemJS -->
+    <script src="systemjs.config.js"></script>
+    <script>
+      System.import('app').catch(function(err){ console.error(err); });
+
+      
+      //Loading the FB SDK asynchronously
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      /*
+      window.fbAsyncInit = function() {
+          FB.init({
+            appId      : '1084413394965091',
+            cookie     : true,  // enable cookies to allow the server to access 
+                                // the session
+            xfbml      : true,  // parse social plugins on this page
+            version    : 'v2.6' // use graph api version 2.6
+          });
+          
+          FB.getLoginStatus(function(response){
+            console.log(response.status);
+            var node, body = document.getElementsByTagName('body')[0];
+            if(response.status === 'connected'){
+
+                node = document.createElement('likers-app-test');
+                
+            }
+            else{
+                node = document.createElement('fb:login-button');
+                var attr = document.createAttribute('scope');
+                attr.value = "public_profile,user_friends,email,user_about_me,user_posts,user_photos";
+                node.setAttributeNode(attr);
+            }
+            //body.insertBefore(node, body.firstChild);
+          });
+          
+      };
+      */
+      
+      
+
+    </script>
+  </head>
+  <!-- 3. Display the application -->
+  <body>
+    
+    <likers-app>Loading...</likers-app>
+    <!--
+     <fb:login-button scope="public_profile,user_friends,email,user_about_me,user_posts,user_photos" onlogin="checkLoginState();">
+     </fb:login-button>
+     -->
+     
+
+  </body>
+</html>
