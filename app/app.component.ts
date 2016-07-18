@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FacebookService } from './facebook.service';
+import { User } from './user'
 
 declare const FB: any;
 
@@ -28,22 +29,21 @@ export class AppComponent implements OnInit {
         
         this.fb.login()
                .then(response => {
-                    this.fbLoginResponse = response;
-                    this.status = 'connected';
-             }).catch(err => { console.log(err); });
-        
-    }
+                   if(response.status !== 'connected'){
+                       this.status = 'Please Refresh Your Browser ...';
+                       return;
+                   }
+                   this.fbLoginResponse = response;
+                   this.status = 'connected';
+                   console.log(this.status);
+                   Promise.resolve('making first request');
+             }).then(step => {
+                 console.log(step);
+                 
 
-    me() {
-        FB.api('/me?fields=id,name,first_name,gender,picture.width(150).height(150),age_range,friends',
-            function(result) {
-                if (result && !result.error) {
-                    this.user = result;
-                    console.log(this.user);
-                } else {
-                    console.log(result.error);
-                }
-            });
+             })
+               .catch(err => { console.log(err); });
+        
     }
 
     ngOnInit() {
@@ -51,14 +51,28 @@ export class AppComponent implements OnInit {
         this.fb.getLoginStatus()
                .then( response => {
                     if (response.status === 'connected') {
-                        console.log('connected');
-                    } else {
-                        this.login();
-                        console.log('not connected');
+                        this.status = 'connected';
+                        console.log(this.status);
+
+                        this.loadInitialData();
+                    } 
+                    else {
+                        this.status = 'not connected ... real status - ' + response.status;
+                        console.log(this.status);
+                        this.login();    
                     }
                })
                .catch(err => { console.log(err); });
-        
-        
     }
+    
+    loadInitialData()
+    {
+        this.fb.me()
+               .then(user => { 
+                   console.log(user.id);
+             }).catch(err => {
+                   console.log(err);
+             });
+    }
+
 }

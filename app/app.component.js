@@ -21,34 +21,43 @@ var AppComponent = (function () {
         var _this = this;
         this.fb.login()
             .then(function (response) {
+            if (response.status !== 'connected') {
+                _this.status = 'Please Refresh Your Browser ...';
+                return;
+            }
             _this.fbLoginResponse = response;
             _this.status = 'connected';
-        }).catch(function (err) { console.log(err); });
-    };
-    AppComponent.prototype.me = function () {
-        FB.api('/me?fields=id,name,first_name,gender,picture.width(150).height(150),age_range,friends', function (result) {
-            if (result && !result.error) {
-                this.user = result;
-                console.log(this.user);
-            }
-            else {
-                console.log(result.error);
-            }
-        });
+            console.log(_this.status);
+            Promise.resolve('making first request');
+        }).then(function (step) {
+            console.log(step);
+        })
+            .catch(function (err) { console.log(err); });
     };
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.fb.getLoginStatus()
             .then(function (response) {
             if (response.status === 'connected') {
-                console.log('connected');
+                _this.status = 'connected';
+                console.log(_this.status);
+                _this.loadInitialData();
             }
             else {
+                _this.status = 'not connected ... real status - ' + response.status;
+                console.log(_this.status);
                 _this.login();
-                console.log('not connected');
             }
         })
             .catch(function (err) { console.log(err); });
+    };
+    AppComponent.prototype.loadInitialData = function () {
+        this.fb.me()
+            .then(function (user) {
+            console.log(user.id);
+        }).catch(function (err) {
+            console.log(err);
+        });
     };
     AppComponent = __decorate([
         core_1.Component({
