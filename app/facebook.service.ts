@@ -4,25 +4,38 @@ import { Liker } from './liker';
 import { LIKERS } from './mock-likers';
 
 declare const FB: any;
-
 @Injectable()
 export class FacebookService {
 
 
-   login(){
-       FB.login( 
-          (result: any) => {
-              return Promise.resolve(result);
-          }, 
-          { scope: 'user_friends' }
-        );
-   }
-   
-    getLoginStatus(){
-        FB.getLoginStatus((response: any) => {
-            return Promise.resolve(response);
+   login() : Promise<any> {
+
+        return new Promise((resolve, reject) => {
+            FB.login(function(result) {
+                        if(result){
+                            resolve(result);
+                        }
+                        reject('Error doing login :(');
+                     }, 
+                     { scope: 'user_friends' }
+            );
         });
-    }
+   }
+
+       
+   
+   getLoginStatus() : Promise<any>{
+        
+        //assuming that FB has been already initialized
+        return new Promise((resolve, reject) => {
+            FB.getLoginStatus(function (response) {
+                if(response){
+                    resolve(response);
+                }
+                reject('Error getting Login Status :(');
+            });
+        });
+   }
     
 
     getLikers(){

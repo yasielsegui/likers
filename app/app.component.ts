@@ -4,7 +4,6 @@ import { FacebookService } from './facebook.service';
 
 declare const FB: any;
 
-
 @Component({
   selector: 'likers-app',
   template: `
@@ -26,20 +25,13 @@ export class AppComponent implements OnInit {
 
 
     login() {
-
-        FB.login( 
-            (response: any) => {
-                 this.fbLoginResponse = response;
-                 this.status = 'connected';
-            }, 
-            { scope: 'user_friends' }
-        );
-        /*
-        this.fb.login(response => {
-          this.fbLoginResponse = response;
-          this.status = 'connected';
-        });
-        */
+        
+        this.fb.login()
+               .then(response => {
+                    this.fbLoginResponse = response;
+                    this.status = 'connected';
+             }).catch(err => { console.log(err); });
+        
     }
 
     me() {
@@ -55,30 +47,18 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-       
-       var me = this;
-        FB.getLoginStatus(response => {
-            if (response.status === 'connected') {
-                me.status = 'connected';
-            } else {
-                me.status = 'not connected';
-                this.login();
-                
-            }
-            console.log(me.status);
-        });
-        
 
-        /*
-        this.fb.getLoginStatus(response => {
-            if (response.status === 'connected') {
-                console.log('connected');
-            } else {
-                this.login();
-                console.log('not connected');
-            }
-        });
-        */
+        this.fb.getLoginStatus()
+               .then( response => {
+                    if (response.status === 'connected') {
+                        console.log('connected');
+                    } else {
+                        this.login();
+                        console.log('not connected');
+                    }
+               })
+               .catch(err => { console.log(err); });
+        
         
     }
 }

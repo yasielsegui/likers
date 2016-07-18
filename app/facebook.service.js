@@ -14,13 +14,24 @@ var FacebookService = (function () {
     function FacebookService() {
     }
     FacebookService.prototype.login = function () {
-        FB.login(function (result) {
-            return Promise.resolve(result);
-        }, { scope: 'user_friends' });
+        return new Promise(function (resolve, reject) {
+            FB.login(function (result) {
+                if (result) {
+                    resolve(result);
+                }
+                reject('Error doing login :(');
+            }, { scope: 'user_friends' });
+        });
     };
     FacebookService.prototype.getLoginStatus = function () {
-        FB.getLoginStatus(function (response) {
-            return Promise.resolve(response);
+        //assuming that FB has been already initialized
+        return new Promise(function (resolve, reject) {
+            FB.getLoginStatus(function (response) {
+                if (response) {
+                    resolve(response);
+                }
+                reject('Error getting Login Status :(');
+            });
         });
     };
     FacebookService.prototype.getLikers = function () {

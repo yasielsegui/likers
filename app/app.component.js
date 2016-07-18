@@ -19,16 +19,11 @@ var AppComponent = (function () {
     }
     AppComponent.prototype.login = function () {
         var _this = this;
-        FB.login(function (response) {
+        this.fb.login()
+            .then(function (response) {
             _this.fbLoginResponse = response;
             _this.status = 'connected';
-        }, { scope: 'user_friends' });
-        /*
-        this.fb.login(response => {
-          this.fbLoginResponse = response;
-          this.status = 'connected';
-        });
-        */
+        }).catch(function (err) { console.log(err); });
     };
     AppComponent.prototype.me = function () {
         FB.api('/me?fields=id,name,first_name,gender,picture.width(150).height(150),age_range,friends', function (result) {
@@ -43,27 +38,17 @@ var AppComponent = (function () {
     };
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
-        var me = this;
-        FB.getLoginStatus(function (response) {
-            if (response.status === 'connected') {
-                me.status = 'connected';
-            }
-            else {
-                me.status = 'not connected';
-                _this.login();
-            }
-            console.log(me.status);
-        });
-        /*
-        this.fb.getLoginStatus(response => {
+        this.fb.getLoginStatus()
+            .then(function (response) {
             if (response.status === 'connected') {
                 console.log('connected');
-            } else {
-                this.login();
+            }
+            else {
+                _this.login();
                 console.log('not connected');
             }
-        });
-        */
+        })
+            .catch(function (err) { console.log(err); });
     };
     AppComponent = __decorate([
         core_1.Component({
