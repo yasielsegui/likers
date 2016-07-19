@@ -60,6 +60,7 @@ export class AppComponent implements OnInit {
                         console.log(this.status);
                         this.login();    
                     }
+                    
                })
                .then(() => {
                    this.loadInitialData();
