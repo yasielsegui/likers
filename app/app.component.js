@@ -41,7 +41,6 @@ var AppComponent = (function () {
             if (response.status === 'connected') {
                 _this.status = 'connected';
                 console.log(_this.status);
-                _this.loadInitialData();
             }
             else {
                 _this.status = 'not connected ... real status - ' + response.status;
@@ -49,12 +48,17 @@ var AppComponent = (function () {
                 _this.login();
             }
         })
+            .then(function () {
+            _this.loadInitialData();
+        })
             .catch(function (err) { console.log(err); });
     };
     AppComponent.prototype.loadInitialData = function () {
+        var scope = this;
         this.fb.me()
             .then(function (user) {
-            console.log(user.id);
+            scope.user = user;
+            console.log(user.picture.url);
         }).catch(function (err) {
             console.log(err);
         });

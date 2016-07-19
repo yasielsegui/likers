@@ -13,6 +13,7 @@ declare const FB: any;
 export class AppComponent implements OnInit {
     title = 'Likers App :)';
 
+    user: User;
     fb: FacebookService;
     fbLoginResponse: any;
     status: string = 'hello';
@@ -52,7 +53,7 @@ export class AppComponent implements OnInit {
                         this.status = 'connected';
                         console.log(this.status);
 
-                        this.loadInitialData();
+                        //this.loadInitialData();
                     } 
                     else {
                         this.status = 'not connected ... real status - ' + response.status;
@@ -60,14 +61,19 @@ export class AppComponent implements OnInit {
                         this.login();    
                     }
                })
+               .then(() => {
+                   this.loadInitialData();
+               })
                .catch(err => { console.log(err); });
     }
     
     loadInitialData()
     {
+        var scope = this;
         this.fb.me()
                .then(user => { 
-                   console.log(user.id);
+                   scope.user = user;
+                   console.log(user.picture.url);
              }).catch(err => {
                    console.log(err);
              });
