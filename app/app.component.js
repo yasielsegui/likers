@@ -62,7 +62,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'likers-app',
-            template: "\n            <h1>{{title}} => {{status}}</h1>\n  ",
+            templateUrl: './app/app.component.html',
             providers: [facebook_service_1.FacebookService]
         }), 
         __metadata('design:paramtypes', [facebook_service_1.FacebookService])

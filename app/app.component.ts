@@ -7,9 +7,7 @@ declare const FB: any;
 
 @Component({
   selector: 'likers-app',
-  template: `
-            <h1>{{title}} => {{status}}</h1>
-  `,
+  templateUrl: './app/app.component.html',
   providers: [ FacebookService ]
 })
 export class AppComponent implements OnInit {

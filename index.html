@@ -1,8 +1,36 @@
 <html>
   <head>
-    <title>Angular 2 QuickStart</title>
+    <title>Likers</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!-- FROM TEMPLATE -->
+
+    <!-- Bootstrap -->
+    <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="./vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="./vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="./vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="./vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+
+    <!-- Custom Theme Style -->
+    <link href="./vendors/build/css/custom.min.css" rel="stylesheet">
+
+   <!-- FROM TEMPLATE -->
+
+
+
     <link rel="stylesheet" href="styles.css">
     <!-- 1. Load libraries -->
      <!-- Polyfill(s) for older browsers -->
@@ -24,42 +52,14 @@
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-      /*
-      window.fbAsyncInit = function() {
-          FB.init({
-            appId      : '1084413394965091',
-            cookie     : true,  // enable cookies to allow the server to access 
-                                // the session
-            xfbml      : true,  // parse social plugins on this page
-            version    : 'v2.6' // use graph api version 2.6
-          });
-          
-          FB.getLoginStatus(function(response){
-            console.log(response.status);
-            var node, body = document.getElementsByTagName('body')[0];
-            if(response.status === 'connected'){
-
-                node = document.createElement('likers-app-test');
-                
-            }
-            else{
-                node = document.createElement('fb:login-button');
-                var attr = document.createAttribute('scope');
-                attr.value = "public_profile,user_friends,email,user_about_me,user_posts,user_photos";
-                node.setAttributeNode(attr);
-            }
-            //body.insertBefore(node, body.firstChild);
-          });
-          
-      };
-      */
+      
       
       
 
     </script>
   </head>
   <!-- 3. Display the application -->
-  <body>
+  <body class="nav-md">
     
     <likers-app>Loading...</likers-app>
     <!--
