@@ -159,7 +159,7 @@ $(document).ready(function() {
     });
 });
 // /Panel toolbox
-
+/*
 // Tooltip
 $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip({
@@ -167,6 +167,7 @@ $(document).ready(function() {
     });
 });
 // /Tooltip
+*/
 
 // Progressbar
 if ($(".progress .progress-bar")[0]) {
@@ -267,6 +268,7 @@ $(document).ready(function() {
     });
 });
 
+/*
 // NProgress
 if (typeof NProgress != 'undefined') {
     $(document).ready(function () {
@@ -277,3 +279,4 @@ if (typeof NProgress != 'undefined') {
         NProgress.done();
     });
 }
+*/
