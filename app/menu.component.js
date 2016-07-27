@@ -14,6 +14,24 @@ var user_1 = require('./user');
 var MenuComponent = (function () {
     function MenuComponent() {
     }
+    //UI Methods
+    MenuComponent.prototype.toggleMenu = function () {
+        var body = document.querySelector("body");
+        if (this.hasClass(body, 'nav-md')) {
+            this.showMenuItems = false;
+            this.itemsClass = 'active-sm';
+        }
+        else {
+            this.showMenuItems = true;
+            this.itemsClass = 'active';
+        }
+        'nav-md nav-sm'.split(' ').forEach(function (s) {
+            body.classList.toggle(s);
+        });
+    };
+    MenuComponent.prototype.hasClass = function (element, cls) {
+        return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', user_1.User)

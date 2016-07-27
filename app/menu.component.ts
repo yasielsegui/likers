@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+
 import { FacebookService } from './facebook.service';
 import { User } from './user'
 
@@ -17,5 +18,32 @@ export class MenuComponent {
 
     @Input()
     test: string;
+
+    showMenuItems: boolean;
+    itemsClass: string;
+
+
+
+    //UI Methods
+    toggleMenu() {
+      var body = document.querySelector("body");
+      if(this.hasClass(body, 'nav-md')){
+
+        this.showMenuItems = false;
+        this.itemsClass = 'active-sm';
+      }
+      else{
+        this.showMenuItems = true;
+        this.itemsClass = 'active';
+      }
+      'nav-md nav-sm'.split(' ').forEach(function(s) { 
+          body.classList.toggle(s); 
+      });
+    }
+
+    hasClass(element, cls) {
+      return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    }
+
 
 }

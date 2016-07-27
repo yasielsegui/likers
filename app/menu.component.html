@@ -26,17 +26,17 @@
         <div class="menu_section">
         <h3>General</h3>
         <ul class="nav side-menu">
-            <li><a><i class="fa fa-bar-chart-o"></i> Home <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li><a href="index.html">Dashboard</a></li>
-            </ul>
+            <li [ngClass]="itemsClass || active-sm" ><a><i class="fa fa-bar-chart-o"></i> Home <span class="fa fa-chevron-down"></span></a>
+                <ul *ngIf="showMenuItems" class="nav child_menu" [style]>
+                    <li><a href="index.html">Dashboard</a></li>
+                </ul>
             </li>
             
-            <li><a><i class="fa fa-table"></i> Lists <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li><a href="tables.html">Tables</a></li>
-                <li><a href="tables_dynamic.html">Table Dynamic</a></li>
-            </ul>
+            <li [ngClass]="itemsClass"><a><i class="fa fa-table"></i> Lists <span class="fa fa-chevron-down"></span></a>
+                <ul *ngIf="showMenuItems" class="nav child_menu">
+                    <li><a href="tables.html">Tables</a></li>
+                    <li><a href="tables_dynamic.html">Table Dynamic</a></li>
+                </ul>
             </li>
             
         </ul>
@@ -52,7 +52,7 @@
     <div class="nav_menu">
     <nav>
         <div class="nav toggle">
-        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+        <a id="menu_toggle" (click)="toggleMenu()" ><i class="fa fa-bars"></i></a>
         </div>
 
         <ul class="nav navbar-nav navbar-right">
