@@ -10,12 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var facebook_service_1 = require('./facebook.service');
+var menu_component_1 = require('./menu.component');
 var AppComponent = (function () {
     function AppComponent(fbService) {
         this.fbService = fbService;
         this.title = 'Likers App :)';
         this.status = 'hello';
         this.fb = fbService;
+        this.test = "Yasiel Segui";
     }
     AppComponent.prototype.login = function () {
         var _this = this;
@@ -67,7 +69,8 @@ var AppComponent = (function () {
         core_1.Component({
             selector: 'likers-app',
             templateUrl: './app/app.component.html',
-            providers: [facebook_service_1.FacebookService]
+            providers: [facebook_service_1.FacebookService],
+            directives: [menu_component_1.MenuComponent]
         }), 
         __metadata('design:paramtypes', [facebook_service_1.FacebookService])
     ], AppComponent);

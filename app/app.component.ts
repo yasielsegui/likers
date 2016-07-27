@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 
 import { FacebookService } from './facebook.service';
 import { User } from './user'
-
+import { MenuComponent } from './menu.component';
 declare const FB: any;
 
 @Component({
   selector: 'likers-app',
   templateUrl: './app/app.component.html',
-  providers: [ FacebookService ]
+  providers: [ FacebookService ],
+  directives: [ MenuComponent ]
 })
 export class AppComponent implements OnInit {
     title = 'Likers App :)';
@@ -17,10 +18,12 @@ export class AppComponent implements OnInit {
     fb: FacebookService;
     fbLoginResponse: any;
     status: string = 'hello';
+    test: string;
     
 
     constructor(private fbService: FacebookService) { 
         this.fb = fbService;
+        this.test = "Yasiel Segui";
     }
 
 
@@ -68,8 +71,7 @@ export class AppComponent implements OnInit {
                .catch(err => { console.log(err); });
     }
     
-    loadInitialData()
-    {
+    loadInitialData() {
         var scope = this;
         this.fb.me()
                .then(user => { 
@@ -79,5 +81,9 @@ export class AppComponent implements OnInit {
                    console.log(err);
              });
     }
+
+
+    
+    
 
 }
