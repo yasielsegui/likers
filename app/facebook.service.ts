@@ -8,9 +8,50 @@ import { LIKERS } from './mock-likers';
 declare const FB: any;
 @Injectable()
 export class FacebookService {
+   isLoggedIn: boolean; 
    user: User;
+   posts: any;
+   photos: any;
+   comments: any;
+   totalLikes: number;
+
+
+   getLikers(top = 100) : Promise<any> {
+       var fb = this;
+       return new Promise((resolve, reject) => {
+           if(!fb.isLoggedIn)
+              reject('Error Getting Likers...');
+
+           Promise.all([fb.loadPosts(), fb.loadPhotos(), fb.loadComments()])
+                  .then((result) => {
+                      [fb.posts, fb.photos, fb.comments] = result;
+
+                      resolve(['1', '12', '123']);
+                  }); 
+           
+           
+       });
+     
+       
+
+
+   }
+
+   loadPosts() : Promise<any> {
+       return Promise.resolve("Whatever");
+   }
+
+   loadPhotos() : Promise<any> {
+       return Promise.resolve("Whatever");
+   }
+
+   loadComments() : Promise<any> {
+       return Promise.resolve("Whatever");
+   }
+
 
    login() : Promise<any> {
+        var fb = this;
         //assuming that FB has been already initialized
         return new Promise((resolve, reject) => {
             FB.login(function(result) {
@@ -27,10 +68,14 @@ export class FacebookService {
        
    
    getLoginStatus() : Promise<any> {
+        var fb = this;
         //assuming that FB has been already initialized
         return new Promise((resolve, reject) => {
             FB.getLoginStatus(function (response) {
                 if(response){
+                    if(response.status === "connected"){
+                        fb.isLoggedIn = true;
+                    }
                     resolve(response);
                 }
                 reject('Error getting Login Status :(');
@@ -78,12 +123,12 @@ export class FacebookService {
    }    
 
 
-   getLikers(){
+   getLikerss(){
        return Promise.resolve(LIKERS);
    }
 
    getLiker(id: string) {
-       return this.getLikers()
+       return this.getLikerss()
                   .then(likers => likers.find(liker => liker.id === id));
    }
 

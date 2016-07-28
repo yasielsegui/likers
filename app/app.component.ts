@@ -68,17 +68,33 @@ export class AppComponent implements OnInit {
                .then(() => {
                    this.loadInitialData();
                })
+               .then(() => {
+                   this.getLikers();
+               })
+               .then(() => {
+                   console.log("finish");
+               })
                .catch(err => { console.log(err); });
     }
     
     loadInitialData() {
+
         var scope = this;
-        this.fb.me()
-               .then(user => { 
-                   scope.user = user;
-                   console.log(user.picture.url);
+        scope.fb.me()
+            .then(user => { 
+                scope.user = user;
+                console.log(user.picture.url);
+                
+            });
+    }
+
+    getLikers() {
+        var scope = this;
+        scope.fb.getLikers(100)
+               .then(result => {
+                   console.log(result.length);
              }).catch(err => {
-                   console.log(err);
+                 console.log(err);
              });
     }
 

@@ -15,7 +15,30 @@ var mock_likers_1 = require('./mock-likers');
 var FacebookService = (function () {
     function FacebookService() {
     }
+    FacebookService.prototype.getLikers = function (top) {
+        if (top === void 0) { top = 100; }
+        var fb = this;
+        return new Promise(function (resolve, reject) {
+            if (!fb.isLoggedIn)
+                reject('Error Getting Likers...');
+            Promise.all([fb.loadPosts(), fb.loadPhotos(), fb.loadComments()])
+                .then(function (result) {
+                fb.posts = result[0], fb.photos = result[1], fb.comments = result[2];
+                resolve(['1', '12', '123']);
+            });
+        });
+    };
+    FacebookService.prototype.loadPosts = function () {
+        return Promise.resolve("Whatever");
+    };
+    FacebookService.prototype.loadPhotos = function () {
+        return Promise.resolve("Whatever");
+    };
+    FacebookService.prototype.loadComments = function () {
+        return Promise.resolve("Whatever");
+    };
     FacebookService.prototype.login = function () {
+        var fb = this;
         //assuming that FB has been already initialized
         return new Promise(function (resolve, reject) {
             FB.login(function (result) {
@@ -27,10 +50,14 @@ var FacebookService = (function () {
         });
     };
     FacebookService.prototype.getLoginStatus = function () {
+        var fb = this;
         //assuming that FB has been already initialized
         return new Promise(function (resolve, reject) {
             FB.getLoginStatus(function (response) {
                 if (response) {
+                    if (response.status === "connected") {
+                        fb.isLoggedIn = true;
+                    }
                     resolve(response);
                 }
                 reject('Error getting Login Status :(');
@@ -73,11 +100,11 @@ var FacebookService = (function () {
         user.friends_total = result.friends.summary.total_count;
         return user;
     };
-    FacebookService.prototype.getLikers = function () {
+    FacebookService.prototype.getLikerss = function () {
         return Promise.resolve(mock_likers_1.LIKERS);
     };
     FacebookService.prototype.getLiker = function (id) {
-        return this.getLikers()
+        return this.getLikerss()
             .then(function (likers) { return likers.find(function (liker) { return liker.id === id; }); });
     };
     FacebookService = __decorate([

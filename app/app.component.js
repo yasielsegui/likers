@@ -53,14 +53,27 @@ var AppComponent = (function () {
             .then(function () {
             _this.loadInitialData();
         })
+            .then(function () {
+            _this.getLikers();
+        })
+            .then(function () {
+            console.log("finish");
+        })
             .catch(function (err) { console.log(err); });
     };
     AppComponent.prototype.loadInitialData = function () {
         var scope = this;
-        this.fb.me()
+        scope.fb.me()
             .then(function (user) {
             scope.user = user;
             console.log(user.picture.url);
+        });
+    };
+    AppComponent.prototype.getLikers = function () {
+        var scope = this;
+        scope.fb.getLikers(100)
+            .then(function (result) {
+            console.log(result.length);
         }).catch(function (err) {
             console.log(err);
         });
