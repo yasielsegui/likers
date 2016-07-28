@@ -21,18 +21,92 @@ var FacebookService = (function () {
         return new Promise(function (resolve, reject) {
             if (!fb.isLoggedIn)
                 reject('Error Getting Likers...');
-            Promise.all([fb.loadPosts(), fb.loadPhotos(), fb.loadComments()])
+            Promise.all([fb.loadPosts(), fb.loadPhotos()])
                 .then(function (result) {
-                fb.posts = result[0], fb.photos = result[1], fb.comments = result[2];
-                resolve(['1', '12', '123']);
+                var postsResp = result[0], photosResp = result[1];
+                fb.likers = {};
+                if (postsResp && postsResp.posts) {
+                    fb.getLikersFromPosts(postsResp, fb.likers);
+                }
+                resolve(['loaded', 'posts', 'and photos']);
             });
         });
     };
+    FacebookService.prototype.getLikersFromPosts = function (response, likers) {
+        if (!(response.posts && response.posts.data.length > 0))
+            return;
+        for (var i = 0; i < response.posts.data.length; i++) {
+            //counting the likes inside your comments
+            var post = response.posts.data[i];
+            if (!(post.comments && post.comments.data.length > 0))
+                continue;
+            for (var j = 0; j < post.comments.data.length; j++) {
+                var comment = post.comments.data[j];
+                if (comment.from.name == "Yasiel Segui") {
+                    if (!(comment.likes && comment.likes.data.length > 0))
+                        continue;
+                    for (var k = 0; k < comment.likes.data.length; k++) {
+                        var like = comment.likes.data[k];
+                        if (likers[like.name]) {
+                            likers[like.name].count++;
+                        }
+                        else {
+                            likers[like.name] = {
+                                id: like.id,
+                                name: like.name,
+                                count: 1,
+                                picture: (like.picture.data.is_silhouette) ? null : like.picture.data.url
+                            };
+                        }
+                    }
+                }
+            }
+            //counting the likes in the actual post
+            if (!(post.likes && post.likes.data.length > 0)) {
+                for (var j = 0; j < post.likes.data.length; j++) {
+                    var like = post.likes.data[j];
+                    if (likers[like.name]) {
+                        likers[like.name].count++;
+                    }
+                    else {
+                        likers[like.name] = {
+                            id: like.id,
+                            name: like.name,
+                            count: 1,
+                            picture: (like.picture.data.is_silhouette) ? null : like.picture.data.url
+                        };
+                    }
+                }
+            }
+        }
+    };
     FacebookService.prototype.loadPosts = function () {
-        return Promise.resolve("Whatever");
+        var fb = this;
+        return new Promise(function (resolve, reject) {
+            FB.api('/me', 'get', { fields: 'posts.limit(1000){id,picture,comments.limit(1000){id,from,likes.limit(1000){id,name,picture}},likes.limit(1000){id,name,picture}}' }, function (response) {
+                if (response) {
+                    console.log('loaded posts');
+                    resolve(response);
+                }
+                else {
+                    reject("Error Loading Posts...");
+                }
+            });
+        });
     };
     FacebookService.prototype.loadPhotos = function () {
-        return Promise.resolve("Whatever");
+        var fb = this;
+        return new Promise(function (resolve, reject) {
+            FB.api('/me', 'get', { fields: 'photos.limit(1000){id,name,likes.limit(1000){id,name,picture}}' }, function (response) {
+                if (response) {
+                    console.log('loaded photos');
+                    resolve(response);
+                }
+                else {
+                    reject("Error Loading Photos...");
+                }
+            });
+        });
     };
     FacebookService.prototype.loadComments = function () {
         return Promise.resolve("Whatever");
