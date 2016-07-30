@@ -10,7 +10,7 @@ declare const FB: any;
       cookie     : true,  // enable cookies to allow the server to access 
                           // the session
       xfbml      : true,  // parse social plugins on this page
-      version    : 'v2.6' // use graph api version 2.6
+      version    : 'v2.7' // use graph api version 2.6
     });
  
 

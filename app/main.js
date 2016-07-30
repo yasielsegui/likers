@@ -6,7 +6,7 @@ FB.init({
     cookie: true,
     // the session
     xfbml: true,
-    version: 'v2.6' // use graph api version 2.6
+    version: 'v2.7' // use graph api version 2.6
 });
 platform_browser_dynamic_1.bootstrap(app_component_1.AppComponent);
 //# sourceMappingURL=main.js.map

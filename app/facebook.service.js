@@ -28,41 +28,62 @@ var FacebookService = (function () {
                 if (postsResp && postsResp.posts) {
                     fb.getLikersFromPosts(postsResp, fb.likers);
                 }
+                if (photosResp && photosResp.photos) {
+                    fb.getLikersFromPhotos(photosResp, fb.likers);
+                }
+                var sortable = [];
+                for (var liker in fb.likers) {
+                    sortable.push(fb.likers[liker]);
+                }
+                sortable.sort(fb.sortLikersCriteria);
+                /*ONLY FOR DEBUGGING PURPOSE*/
+                fb.logLikers(sortable, 100, fb.user.total_likes);
                 resolve(['loaded', 'posts', 'and photos']);
             });
         });
     };
+    FacebookService.prototype.logLikers = function (likers, top, total_likes) {
+        if (top === void 0) { top = 100; }
+        console.log("Total Likes: " + total_likes);
+        for (var i = 0; i < Math.min(likers.length, top); i++) {
+            console.log((i + 1) + " - " + likers[i].name + " ----- " + likers[i].count + '\n');
+        }
+    };
+    FacebookService.prototype.sortLikersCriteria = function (a, b) {
+        return b.count - a.count;
+    };
     FacebookService.prototype.getLikersFromPosts = function (response, likers) {
-        if (!(response.posts && response.posts.data.length > 0))
+        if (!response.posts || response.posts.data.length <= 0)
             return;
         for (var i = 0; i < response.posts.data.length; i++) {
             //counting the likes inside your comments
             var post = response.posts.data[i];
-            if (!(post.comments && post.comments.data.length > 0))
-                continue;
-            for (var j = 0; j < post.comments.data.length; j++) {
-                var comment = post.comments.data[j];
-                if (comment.from.name == "Yasiel Segui") {
-                    if (!(comment.likes && comment.likes.data.length > 0))
-                        continue;
-                    for (var k = 0; k < comment.likes.data.length; k++) {
-                        var like = comment.likes.data[k];
-                        if (likers[like.name]) {
-                            likers[like.name].count++;
-                        }
-                        else {
-                            likers[like.name] = {
-                                id: like.id,
-                                name: like.name,
-                                count: 1,
-                                picture: (like.picture.data.is_silhouette) ? null : like.picture.data.url
-                            };
+            if (post.comments && post.comments.data.length > 0) {
+                for (var j = 0; j < post.comments.data.length; j++) {
+                    var comment = post.comments.data[j];
+                    if (comment.from.id === this.user.id) {
+                        if (!comment.likes || comment.likes.data.length <= 0)
+                            continue;
+                        for (var k = 0; k < comment.likes.data.length; k++) {
+                            var like = comment.likes.data[k];
+                            if (likers[like.name]) {
+                                likers[like.name].count++;
+                            }
+                            else {
+                                likers[like.name] = {
+                                    id: like.id,
+                                    name: like.name,
+                                    count: 1,
+                                    picture: (like.picture.data.is_silhouette) ? null : like.picture.data.url
+                                };
+                            }
+                            this.user.total_likes += 1;
                         }
                     }
                 }
             }
             //counting the likes in the actual post
-            if (!(post.likes && post.likes.data.length > 0)) {
+            if (post.likes && post.likes.data.length > 0) {
                 for (var j = 0; j < post.likes.data.length; j++) {
                     var like = post.likes.data[j];
                     if (likers[like.name]) {
@@ -76,6 +97,57 @@ var FacebookService = (function () {
                             picture: (like.picture.data.is_silhouette) ? null : like.picture.data.url
                         };
                     }
+                    this.user.total_likes += 1;
+                }
+            }
+        }
+    };
+    FacebookService.prototype.getLikersFromPhotos = function (response, likers) {
+        if (!response.photos || response.photos.data.length <= 0)
+            return;
+        for (var i = 0; i < response.photos.data.length; i++) {
+            //counting the likes inside your comments
+            var photo = response.photos.data[i];
+            if (photo.comments && photo.comments.data.length > 0) {
+                for (var j = 0; j < photo.comments.data.length; j++) {
+                    var comment = photo.comments.data[j];
+                    if (comment.from.id === this.user.id) {
+                        if (!comment.likes || comment.likes.data.length <= 0)
+                            continue;
+                        for (var k = 0; k < comment.likes.data.length; k++) {
+                            var like = comment.likes.data[k];
+                            if (likers[like.name]) {
+                                likers[like.name].count++;
+                            }
+                            else {
+                                likers[like.name] = {
+                                    id: like.id,
+                                    name: like.name,
+                                    count: 1,
+                                    picture: (like.picture.data.is_silhouette) ? null : like.picture.data.url
+                                };
+                            }
+                            this.user.total_likes += 1;
+                        }
+                    }
+                }
+            }
+            //counting the likes in the actual photo
+            if (photo.likes && photo.likes.data.length > 0) {
+                for (var j = 0; j < photo.likes.data.length; j++) {
+                    var like = photo.likes.data[j];
+                    if (likers[like.name]) {
+                        likers[like.name].count++;
+                    }
+                    else {
+                        likers[like.name] = {
+                            id: like.id,
+                            name: like.name,
+                            count: 1,
+                            picture: (like.picture.data.is_silhouette) ? null : like.picture.data.url
+                        };
+                    }
+                    this.user.total_likes += 1;
                 }
             }
         }
@@ -97,7 +169,7 @@ var FacebookService = (function () {
     FacebookService.prototype.loadPhotos = function () {
         var fb = this;
         return new Promise(function (resolve, reject) {
-            FB.api('/me', 'get', { fields: 'photos.limit(1000){id,name,likes.limit(1000){id,name,picture}}' }, function (response) {
+            FB.api('/me', 'get', { fields: 'photos.limit(1000){id,name,comments.limit(1000){id,from,likes.limit(1000){id,name,picture}},likes.limit(1000){id,name,picture}}' }, function (response) {
                 if (response) {
                     console.log('loaded photos');
                     resolve(response);
@@ -159,6 +231,7 @@ var FacebookService = (function () {
         user.id = result.id;
         user.gender = result.gender;
         user.likes = 0;
+        user.total_likes = 0;
         user.name = result.name;
         var picture = new picture_1.Picture();
         if (result.picture.data.is_silhouette) {

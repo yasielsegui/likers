@@ -11,5 +11,6 @@ export class User {
   posts_total: number;
   comments_total: number;
   photos_total: number;
+  total_likes: number;
   
 }
