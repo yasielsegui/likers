@@ -45,7 +45,7 @@ export class FacebookService {
                       fb.user.friends = sortable.slice(0, fb.user.total_friends);
 
                       /*ONLY FOR DEBUGGING PURPOSE*/
-                      fb.logLikers(sortable, 100, fb.user.total_likes);
+                      //fb.logLikers(sortable, 100, fb.user.total_likes);
                       
                       resolve(['loaded', 'posts', 'and photos']);
                   }); 
@@ -211,7 +211,7 @@ export class FacebookService {
        var fb = this;
        return new Promise((resolve, reject) => {
            FB.api('/me', 'get', 
-                { fields: 'posts.limit(1000){id,picture,comments.limit(1000){id,from,likes.limit(1000){id,name,picture}},likes.limit(1000){id,name,picture}}'},
+                { fields: 'posts.limit(1000){id,picture,comments.limit(1000){id,from,likes.limit(1000){id,name,created_time,picture}},likes.limit(1000){id,name,created_time,picture}}'},
                 function(response) {
                     if (response) {
                       console.log('loaded posts');
@@ -227,7 +227,7 @@ export class FacebookService {
        var fb = this;
        return new Promise((resolve, reject) => {
            FB.api('/me', 'get', 
-                { fields: 'photos.limit(1000){id,name,comments.limit(1000){id,from,likes.limit(1000){id,name,picture}},likes.limit(1000){id,name,picture}}'},
+                { fields: 'photos.limit(1000){id,name,comments.limit(1000){id,from,likes.limit(1000){id,name,created_time,picture}},likes.limit(1000){id,name,created_time,picture}}'},
                 function(response) {
                     if (response) {
                       console.log('loaded photos');  
