@@ -26,16 +26,17 @@ var FacebookService = (function () {
                 var postsResp = result[0], photosResp = result[1];
                 fb.likers = {};
                 if (postsResp && postsResp.posts) {
-                    fb.getLikersFromPosts(postsResp, fb.likers);
+                    fb.user.total_posts = fb.getLikersFromPosts(postsResp, fb.likers);
                 }
                 if (photosResp && photosResp.photos) {
-                    fb.getLikersFromPhotos(photosResp, fb.likers);
+                    fb.user.total_photos = fb.getLikersFromPhotos(photosResp, fb.likers);
                 }
                 var sortable = [];
                 for (var liker in fb.likers) {
                     sortable.push(fb.likers[liker]);
                 }
                 sortable.sort(fb.sortLikersCriteria);
+                fb.user.friends = sortable.slice(0, fb.user.total_friends);
                 /*ONLY FOR DEBUGGING PURPOSE*/
                 fb.logLikers(sortable, 100, fb.user.total_likes);
                 resolve(['loaded', 'posts', 'and photos']);
@@ -54,8 +55,10 @@ var FacebookService = (function () {
     };
     FacebookService.prototype.getLikersFromPosts = function (response, likers) {
         if (!response.posts || response.posts.data.length <= 0)
-            return;
+            return 0;
+        var total_posts = 0;
         for (var i = 0; i < response.posts.data.length; i++) {
+            total_posts += 1;
             //counting the likes inside your comments
             var post = response.posts.data[i];
             if (post.comments && post.comments.data.length > 0) {
@@ -101,11 +104,14 @@ var FacebookService = (function () {
                 }
             }
         }
+        return total_posts;
     };
     FacebookService.prototype.getLikersFromPhotos = function (response, likers) {
         if (!response.photos || response.photos.data.length <= 0)
-            return;
+            return 0;
+        var total_photos = 0;
         for (var i = 0; i < response.photos.data.length; i++) {
+            total_photos += 1;
             //counting the likes inside your comments
             var photo = response.photos.data[i];
             if (photo.comments && photo.comments.data.length > 0) {
@@ -151,6 +157,7 @@ var FacebookService = (function () {
                 }
             }
         }
+        return total_photos;
     };
     FacebookService.prototype.loadPosts = function () {
         var fb = this;
@@ -213,7 +220,7 @@ var FacebookService = (function () {
     FacebookService.prototype.me = function () {
         var fb = this;
         return new Promise(function (resolve, reject) {
-            FB.api('/me?fields=id,name,gender,picture.width(150).height(150),age_range,friends', function (result) {
+            FB.api('/me?fields=id,name,gender,picture.width(150).height(150),age_range,friends.limit(1),posts.limit(1),photos.limit(1)', function (result) {
                 if (result && !result.error) {
                     console.log('user info received');
                     fb.user = fb.getUserInfo(result);
@@ -230,9 +237,12 @@ var FacebookService = (function () {
         var user = new user_1.User();
         user.id = result.id;
         user.gender = result.gender;
-        user.likes = 0;
         user.total_likes = 0;
         user.name = result.name;
+        user.posts = {};
+        user.comments = {};
+        user.photos = {};
+        user.friends = {};
         var picture = new picture_1.Picture();
         if (result.picture.data.is_silhouette) {
             picture.is_silhouette = true;
@@ -244,7 +254,10 @@ var FacebookService = (function () {
             picture.height = result.picture.data.height;
         }
         user.picture = picture;
-        user.friends_total = result.friends.summary.total_count;
+        user.total_friends = 0;
+        if (result.friends && result.friends.summary) {
+            user.total_friends = result.friends.summary.total_count;
+        }
         return user;
     };
     FacebookService.prototype.getLikerss = function () {

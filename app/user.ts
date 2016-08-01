@@ -6,11 +6,14 @@ export class User {
   name: string;
   picture: Picture;
   gender: string;
-  likes: number;
-  friends_total: number;
-  posts_total: number;
-  comments_total: number;
-  photos_total: number;
+  friends: any;
+  total_friends: number;
+  posts: any;
+  total_posts: number;
+  comments: any;
+  total_comments: number;
+  photos: any;
+  total_photos: number;
   total_likes: number;
   
 }
