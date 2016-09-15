@@ -38,7 +38,7 @@ var FacebookService = (function () {
                 sortable.sort(fb.sortLikersCriteria);
                 fb.user.friends = sortable.slice(0, fb.user.total_friends);
                 /*ONLY FOR DEBUGGING PURPOSE*/
-                //fb.logLikers(sortable, 100, fb.user.total_likes);
+                fb.logLikers(sortable, 100, fb.user.total_likes);
                 resolve(['loaded', 'posts', 'and photos']);
             });
         });
