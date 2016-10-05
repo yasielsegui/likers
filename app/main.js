@@ -2,7 +2,7 @@
 var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
 var app_component_1 = require('./app.component');
 FB.init({
-    appId: '1084413394965091',
+    appId: '1764573860459410',
     cookie: true,
     // the session
     xfbml: true,

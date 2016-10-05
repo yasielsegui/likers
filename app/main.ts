@@ -6,7 +6,7 @@ declare const FB: any;
 
 
     FB.init({
-      appId      : '1084413394965091',
+      appId      : '1764573860459410',
       cookie     : true,  // enable cookies to allow the server to access 
                           // the session
       xfbml      : true,  // parse social plugins on this page
